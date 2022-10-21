@@ -9,10 +9,10 @@ an [issue](/issues), [mail](mailto://admin@koboo.eu) or [pull-request](/pulls).
 
 # Overview
 
-- [References](#references)
+- [References](#references--sources)
 - [License](/LICENSE)
 
-
-## References
+## References & Sources
 - [Official Documentation](https://docs.google.com/document/d/1OFS-3ocSx-1Rvg4afAnEHlT3917MAK_6eJTR6rzr-BM/edit)
 - [Java 9 HttpClient](https://www.baeldung.com/java-9-http-client)
+- [Paladins Fandom Wiki](https://paladins.fandom.com/wiki)
