@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 group "$projectGroup"
@@ -10,9 +12,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
-    implementation 'org.json:json:20170516'
-
     implementation "com.google.code.gson:gson:$gsonVersion"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
@@ -27,4 +26,21 @@ java {
 compileJava.options.encoding = 'UTF-8'
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+publishing {
+    repositories {
+        maven {
+            url 'https://reposilite.koboo.eu/releases'
+            credentials {
+                username System.getenv('REPO_USER')
+                password System.getenv('REPO_TOKEN')
+            }
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
 }
