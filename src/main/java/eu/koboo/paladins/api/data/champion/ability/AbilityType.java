@@ -22,7 +22,7 @@ public enum AbilityType {
 
     public static AbilityType parse(int abilityNumber) {
         for (AbilityType value : VALUES) {
-            if(value.getNumber() != abilityNumber) {
+            if (value.getNumber() != abilityNumber) {
                 continue;
             }
             return value;

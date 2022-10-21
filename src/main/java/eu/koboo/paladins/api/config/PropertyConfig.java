@@ -4,14 +4,13 @@ import java.io.*;
 import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
-import java.util.UUID;
 
 public class PropertyConfig {
 
     public static PropertyConfig fromFile(String filePath) {
         try {
             File file = new File(filePath);
-            if(!file.exists()) {
+            if (!file.exists()) {
                 throw new FileNotFoundException("File \"" + filePath + "\" doesn't exists.");
             }
             InputStream stream = new FileInputStream(file);
@@ -28,11 +27,11 @@ public class PropertyConfig {
         try {
             Class<PropertyConfig> clazz = PropertyConfig.class;
             URL resourceFile = clazz.getResource(resourcePath);
-            if(resourceFile == null) {
+            if (resourceFile == null) {
                 throw new FileNotFoundException("Resource \"" + resourcePath + "\" doesn't exists.");
             }
             InputStream stream = clazz.getResourceAsStream(resourcePath);
-            if(stream == null) {
+            if (stream == null) {
                 throw new FileNotFoundException("Couldn't create InputStream for resource \"" + resourcePath + "\".");
             }
             Properties properties = new Properties();
@@ -59,7 +58,7 @@ public class PropertyConfig {
     }
 
     public void save(String filePath, String comments) {
-        try(FileOutputStream out = new FileOutputStream(filePath)) {
+        try (FileOutputStream out = new FileOutputStream(filePath)) {
             properties.store(out, comments);
         } catch (IOException e) {
             throw new RuntimeException("Couldn't save PropertiesConfig to file \"" + filePath + "\":", e);
@@ -71,7 +70,7 @@ public class PropertyConfig {
     }
 
     public void save(File file, String comments) {
-        try(FileOutputStream out = new FileOutputStream(file)) {
+        try (FileOutputStream out = new FileOutputStream(file)) {
             properties.store(out, comments);
         } catch (IOException e) {
             throw new RuntimeException("Couldn't save PropertiesConfig to file \"" + file.getAbsolutePath() + "\":", e);
@@ -84,7 +83,7 @@ public class PropertyConfig {
 
     public WrappedResult get(String key) {
         String value = properties.getProperty(key);
-        if(value == null) {
+        if (value == null) {
             return WrappedResult.empty();
         }
         return WrappedResult.of(value);

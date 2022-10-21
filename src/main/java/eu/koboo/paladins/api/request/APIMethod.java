@@ -38,15 +38,15 @@ public enum APIMethod {
 
     public String url(APIRequest request, Language language, long championId, long queue) {
 
-        if(urlBuilder instanceof URLBuilderLanguage languageBuilder) {
+        if (urlBuilder instanceof URLBuilderLanguage languageBuilder) {
             return languageBuilder.build(request, this, language);
         }
 
-        if(urlBuilder instanceof URLBuilderChampion championBuilder) {
+        if (urlBuilder instanceof URLBuilderChampion championBuilder) {
             return championBuilder.build(request, this, language, championId);
         }
 
-        if(urlBuilder instanceof URLBuilderLeaderboard leaderboardBuilder) {
+        if (urlBuilder instanceof URLBuilderLeaderboard leaderboardBuilder) {
             return leaderboardBuilder.build(request, this, championId, queue);
         }
 

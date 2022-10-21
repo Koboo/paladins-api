@@ -19,7 +19,7 @@ public record WrappedResult(String value) {
     }
 
     public String asStringOr(String defaultValue) {
-        if(value == null) {
+        if (value == null) {
             return defaultValue;
         }
         return asString();
@@ -53,7 +53,7 @@ public record WrappedResult(String value) {
     }
 
     public int asIntOr(int defaultValue) {
-        if(value == null) {
+        if (value == null) {
             return defaultValue;
         }
         return asInt();
@@ -64,7 +64,7 @@ public record WrappedResult(String value) {
     }
 
     public short asShortOr(short defaultValue) {
-        if(value == null) {
+        if (value == null) {
             return defaultValue;
         }
         return asShort();
@@ -75,7 +75,7 @@ public record WrappedResult(String value) {
     }
 
     public double asDoubleOr(double defaultValue) {
-        if(value == null) {
+        if (value == null) {
             return defaultValue;
         }
         return asDouble();
@@ -86,7 +86,7 @@ public record WrappedResult(String value) {
     }
 
     public float asFloatOr(float defaultValue) {
-        if(value == null) {
+        if (value == null) {
             return defaultValue;
         }
         return asFloat();

@@ -103,7 +103,7 @@ public class APIRequest {
 
     public JsonObject asJsonObject() {
         String result = asString();
-        if(Validator.isEmpty(result)) {
+        if (Validator.isEmpty(result)) {
             return null;
         }
         return (JsonObject) JsonParser.parseString(result);
@@ -111,7 +111,7 @@ public class APIRequest {
 
     public JsonArray asJsonArray() {
         String result = asString();
-        if(Validator.isEmpty(result)) {
+        if (Validator.isEmpty(result)) {
             return null;
         }
         return (JsonArray) JsonParser.parseString(result);

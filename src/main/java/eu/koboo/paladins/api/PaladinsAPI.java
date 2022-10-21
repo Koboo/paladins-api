@@ -3,13 +3,13 @@ package eu.koboo.paladins.api;
 import com.google.gson.*;
 import eu.koboo.paladins.api.config.PropertyConfig;
 import eu.koboo.paladins.api.data.champion.Champion;
+import eu.koboo.paladins.api.data.champion.leaderboard.BoardRank;
 import eu.koboo.paladins.api.data.champion.skin.Skin;
 import eu.koboo.paladins.api.data.connectivity.DataStats;
 import eu.koboo.paladins.api.data.connectivity.ServerStatus;
-import eu.koboo.paladins.api.data.champion.leaderboard.BoardRank;
-import eu.koboo.paladins.api.request.Language;
-import eu.koboo.paladins.api.request.APIRequest;
 import eu.koboo.paladins.api.request.APIMethod;
+import eu.koboo.paladins.api.request.APIRequest;
+import eu.koboo.paladins.api.request.Language;
 import eu.koboo.paladins.api.utils.SessionUtils;
 import eu.koboo.paladins.api.utils.Validator;
 import lombok.AccessLevel;
@@ -298,7 +298,7 @@ public class PaladinsAPI {
             System.out.println("First Place: " + boardRankList.get(0).getPlayerName());
         }
 
-        if(which[6]) {
+        if (which[6]) {
             System.out.println("=====> Getting ChampionSkins..");
             List<Skin> skinList = api.getChampionSkins(Language.ENGLISH, -1);
             System.out.println("Skins: " + skinList.size());

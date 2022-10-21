@@ -22,7 +22,7 @@ public class BoardRank {
 
     public BoardRank(JsonObject object, long championId) {
         try {
-            if(championId != -1) {
+            if (championId != -1) {
                 this.championId = championId;
             } else {
                 this.championId = Long.parseLong(object.get("champion_id").getAsString());

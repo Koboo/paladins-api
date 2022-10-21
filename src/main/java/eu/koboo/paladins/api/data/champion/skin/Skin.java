@@ -24,7 +24,7 @@ public class Skin {
 
     public Skin(JsonObject object, long championId, Language language) {
         try {
-            if(championId != -1) {
+            if (championId != -1) {
                 this.championId = championId;
             } else {
                 this.championId = Long.parseLong(object.get("champion_id").getAsString());

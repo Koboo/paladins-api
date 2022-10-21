@@ -14,7 +14,7 @@ public enum Rarity {
     public static final Rarity[] VALUES = Rarity.values();
 
     public static Rarity parse(String string) {
-        if(string.equalsIgnoreCase("")) {
+        if (string.equalsIgnoreCase("")) {
             return DEFAULT;
         }
         return Rarity.valueOf(string.toUpperCase(Locale.ROOT));

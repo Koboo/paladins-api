@@ -7,13 +7,13 @@ public class Validator {
     }
 
     public static void notNull(Object object, String appendText) {
-        if(object == null) {
+        if (object == null) {
             throw new NullPointerException("An object of the type " + object.getClass().getName() + " is null." + (appendText == null ? "" : " " + appendText));
         }
     }
 
     public static boolean isEmpty(String result) {
-        if(result != null) {
+        if (result != null) {
             result = result.replaceAll("\"", "");
         }
         return result == null || result.isBlank() || result.isEmpty() || result.equalsIgnoreCase("");

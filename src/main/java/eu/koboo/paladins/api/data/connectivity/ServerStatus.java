@@ -25,7 +25,7 @@ public class ServerStatus {
     public ServerStatus(JsonObject object) {
         try {
             JsonElement dateTimeElement = object.get("entry_datetime");
-            if(object.has("entry_datetime") && !object.get("entry_datetime").isJsonNull()) {
+            if (object.has("entry_datetime") && !object.get("entry_datetime").isJsonNull()) {
                 entryTimeStamp = ENTRY_DATE_FORMAT.parse(dateTimeElement.getAsString()).getTime();
             } else {
                 entryTimeStamp = -1;

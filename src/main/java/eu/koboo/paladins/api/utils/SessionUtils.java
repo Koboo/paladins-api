@@ -7,16 +7,16 @@ public class SessionUtils {
 
     public static String parseSessionId(APIRequest request) {
         JsonObject object = request.asJsonObject();
-        if(object == null) {
+        if (object == null) {
             return null;
         }
-        if(!object.has("ret_msg")) {
+        if (!object.has("ret_msg")) {
             return null;
         }
-        if(!object.get("ret_msg").getAsString().equals("Approved")) {
+        if (!object.get("ret_msg").getAsString().equals("Approved")) {
             return null;
         }
-        if(!object.has("session_id")) {
+        if (!object.has("session_id")) {
             return null;
         }
         return object.get("session_id").getAsString();
@@ -24,7 +24,7 @@ public class SessionUtils {
 
     public static boolean isValidSession(APIRequest request) {
         String result = request.asString();
-        if(result == null || result.isBlank() || result.isEmpty()) {
+        if (result == null || result.isBlank() || result.isEmpty()) {
             return false;
         }
         result = result.replaceAll("\"", "");
