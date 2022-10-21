@@ -7,9 +7,12 @@ import eu.koboo.paladins.api.data.champion.leaderboard.BoardRank;
 import eu.koboo.paladins.api.data.champion.skin.Skin;
 import eu.koboo.paladins.api.data.connectivity.DataStats;
 import eu.koboo.paladins.api.data.connectivity.ServerStatus;
+import eu.koboo.paladins.api.data.items.Item;
+import eu.koboo.paladins.api.data.items.ItemType;
 import eu.koboo.paladins.api.request.APIMethod;
 import eu.koboo.paladins.api.request.APIRequest;
 import eu.koboo.paladins.api.request.Language;
+import eu.koboo.paladins.api.request.URLBuilderPlayer;
 import eu.koboo.paladins.api.utils.SessionUtils;
 import eu.koboo.paladins.api.utils.Validator;
 import lombok.AccessLevel;
@@ -187,8 +190,8 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            BoardRank champion = new BoardRank(object, championId);
-            list.add(champion);
+            BoardRank boardRank = new BoardRank(object, championId);
+            list.add(boardRank);
         }
         return list;
     }
@@ -205,17 +208,53 @@ public class PaladinsAPI {
         if (array == null) {
             return list;
         }
-        System.out.println(array);
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            Skin champion = new Skin(object, championId, language);
-            list.add(champion);
+            Skin skin = new Skin(object, championId, language);
+            list.add(skin);
         }
         return list;
     }
 
     public List<Skin> getAllChampionSkins(Language language) {
         return getChampionSkins(language, -1);
+    }
+
+    public List<Item> getItems(Language language) {
+        Validator.apiMethod(currentSessionId, "getItems");
+        List<Item> list = new ArrayList<>();
+        JsonArray array = APIRequest.create(client, config.getCredentials())
+                .session(currentSessionId)
+                .method(APIMethod.GET_ITEMS)
+                .lang(language)
+                .asJsonArray();
+        if (array == null) {
+            return list;
+        }
+        for (JsonElement element : array) {
+            JsonObject object = (JsonObject) element;
+            if (object.has("item_type") && !object.get("item_type").isJsonNull()
+                    // Skip deprecated items.
+                    && object.get("item_type").getAsString().startsWith("zDeprecated")) {
+                continue;
+            }
+            Item item = new Item(object, language);
+            list.add(item);
+        }
+        return list;
+    }
+
+    public void getPlayer(String player) {
+        Validator.apiMethod(currentSessionId, "getPlayer");
+        JsonObject object = APIRequest.create(client, config.getCredentials())
+                .session(currentSessionId)
+                .method(APIMethod.GET_PLAYER)
+                .player(player)
+                .asFirstJsonObject();
+        if (object == null) {
+            return;
+        }
+        System.out.println(object);
     }
 
     public static void main(String[] args) {
@@ -226,7 +265,8 @@ public class PaladinsAPI {
                 false, // patch info
                 false, // get all champions
                 false, // get champion leaderboard
-                true, // get champion skins
+                false, // get champion skins
+                false, // get items
         };
 
         System.out.println("=====> Reading properties..");
@@ -248,6 +288,9 @@ public class PaladinsAPI {
                     config.set("sessionId", newSessionId);
                     config.save(configFile);
                 }));
+
+        //long ioChampionId = 2517;
+        long ioChampionId = 2431;
 
         if (which[0]) {
             System.out.println("=====> Pinging API..");
@@ -289,8 +332,6 @@ public class PaladinsAPI {
             System.out.println("Champions: " + championList.size());
         }
 
-        long ioChampionId = 2517;
-
         if (which[5]) {
             System.out.println("=====> Getting ChampionLeaderboard (" + ioChampionId + ")..");
             List<BoardRank> boardRankList = api.getChampionLeaderboard(ioChampionId);
@@ -304,6 +345,13 @@ public class PaladinsAPI {
             System.out.println("Skins: " + skinList.size());
         }
 
+        if (which[7]) {
+            System.out.println("=====> Getting Items..");
+            List<Item> itemList = api.getItems(Language.GERMAN);
+            System.out.println("Items: " + itemList.size());
+        }
+
+        api.getPlayer("NotKoboo");
     }
 
 }

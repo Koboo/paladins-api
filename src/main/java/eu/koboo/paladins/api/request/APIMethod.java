@@ -25,6 +25,10 @@ public enum APIMethod {
     GET_CHAMPIONS("getchampions", new URLBuilderLanguage()),
     GET_CHAMPION_LEADERBOARD("getchampionleaderboard", new URLBuilderLeaderboard()),
     GET_CHAMPION_SKINS("getchampionskins", new URLBuilderChampion()),
+    GET_ITEMS("getitems", new URLBuilderLanguage()),
+
+    /* Players and PlayerIds */
+    GET_PLAYER("getplayer", new URLBuilderPlayer()),
 
     // Unsupported and deprecated by this API. Use APIMethod.GET_ITEMS instead.,
     GET_CHAMPION_CARDS("getchampioncards", new URLBuilderChampion()),
@@ -36,7 +40,7 @@ public enum APIMethod {
     String name;
     URLBuilder urlBuilder;
 
-    public String url(APIRequest request, Language language, long championId, long queue) {
+    public String url(APIRequest request, Language language, long championId, long queue, String player) {
 
         if (urlBuilder instanceof URLBuilderLanguage languageBuilder) {
             return languageBuilder.build(request, this, language);
@@ -48,6 +52,10 @@ public enum APIMethod {
 
         if (urlBuilder instanceof URLBuilderLeaderboard leaderboardBuilder) {
             return leaderboardBuilder.build(request, this, championId, queue);
+        }
+
+        if(urlBuilder instanceof URLBuilderPlayer playerBuilder) {
+            return playerBuilder.build(request, this, player);
         }
 
         return urlBuilder.build(request, this);
