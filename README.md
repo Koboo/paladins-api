@@ -1,58 +1,28 @@
 # Paladins Java API
 
-This is a java wrapper for HiRez [Paladins](https://www.paladins.com/) API.
+Simple and up-to-date java wrapper for [HiRez' Paladins REST-API](https://www.paladins.com/).
 
-## Developer API Documentation
+**Note:** If any changes from the api are not already implemented into this wrapper, please let me know through
+an [issue](/issues), [mail](mailto://admin@koboo.eu) or [pull-request](/pulls).
 
-[https://docs.google.com/document/d/1OFS-3ocSx-1Rvg4afAnEHlT3917MAK_6eJTR6rzr-BM/edit]
+(updated fork of HeyZeer0's [Paladins-Java-API](https://github.com/HeyZeer0/Paladins-Java-API))
 
-Usage example
-========
+# Overview
 
-```java
-    public class Example {
+- [References](#references)
+- [License](#license)
 
-    public static PaladinsAPI api = new PaladinsAPI("your dev_id", "your_dev_key", Platform.PC);
-    //                                               ^ dev_id       ^ dev_key      ^ Platform#PC/XBOX/PS4
 
-    public static void main(String args[]) {
-        //getting a player info
-        try {
-            PaladinsPlayer p = api.getRequestManager().requestPlayer("HeyZeer0");
-            System.out.println("User: " + p.getName() + " | ID: " + p.getID() + " | Level: " + p.getLevel());
-            System.out.println("Wins: " + p.getWins() + " | Losses: " + p.getLosses() + " | Leaves: " + p.getLeaves());
-            System.out.println("Join date: " + p.getJoinDate() + " | Last login: " + p.getLastLogin());
-            /// and others
-        } catch (UnknowPlayerException e) {
-            System.out.print("There is no player with that nick");
-        } catch (SessionException e) {
-            System.out.println("An error ocurred while trying to create the session: " + e.getLocalizedMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+## References
+- [Official Documentation](https://docs.google.com/document/d/1OFS-3ocSx-1Rvg4afAnEHlT3917MAK_6eJTR6rzr-BM/edit)
+- [Java 9 HttpClient](https://www.baeldung.com/java-9-http-client)
 
-        //applying a created session
-        //Use: if your program restart, you can simple save your actual key and use it when restarts, respecting the 15m time limit
-        try {
-            api.getRequestManager().applySession("your_key");
-        } catch (SessionException e) {
-            System.out.println("An error ocurred while trying to create the session: " + e.getLocalizedMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-}
-```
-
-License
-========
+## License
 
 ```
 The MIT License (MIT)
 
-Copyright (c) 2017 HeyZeer0
+Copyright (c) 2022 Koboo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
