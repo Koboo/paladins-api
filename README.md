@@ -1,22 +1,10 @@
-# Paladins Java API <img align="right" src="https://hzweb.hi-rezgame.net/paladins-web/wp-content/uploads/2016/06/cropped-2016-06-03-192x192.png" height="192" width="192">
-[![Build Status](http://ci.heyzeer0.cf/buildStatus/icon?job=Paladins%20Java%20API)](http://ci.heyzeer0.cf/job/Paladins%20Java%20API/) [![Version](https://api.bintray.com/packages/heyzeer0/maven/Paladins-Java-API/images/download.svg)](https://bintray.com/heyzeer0/maven/Paladins-Java-API)</br>
-This is a simple wrapper for HiRez [Paladins](https://www.paladins.com/?lang=pt_BR) API.</br>
-This project is in a Working in Progress status and more functions will be added soon.
+# Paladins Java API
 
-Maven
-========
-Don't forget to add the jcenter repository ;)
-```maven
-<dependency>
-  <groupId>net.heyzeer0.papi</groupId>
-  <artifactId>PaladinsAPI</artifactId>
-  <version>+</version>
-</dependency>
-```
-```gradle
-compile 'net.heyzeer0.papi:PaladinsAPI:+'
-```
+This is a java wrapper for HiRez [Paladins](https://www.paladins.com/) API.
 
+## Developer API Documentation
+
+[https://docs.google.com/document/d/1OFS-3ocSx-1Rvg4afAnEHlT3917MAK_6eJTR6rzr-BM/edit]
 
 Usage example
 ========
@@ -81,5 +69,3 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
-
-Paladins Logo is over Copyright © by HiRez Studios so it is not my property.
