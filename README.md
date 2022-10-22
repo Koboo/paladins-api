@@ -14,5 +14,7 @@ an [issue](/issues), [mail](mailto://admin@koboo.eu) or [pull-request](/pulls).
 
 ## References & Sources
 - [Official Documentation](https://docs.google.com/document/d/1OFS-3ocSx-1Rvg4afAnEHlT3917MAK_6eJTR6rzr-BM/edit)
+- [Unoffical Documentation](https://github.com/luissilva1044894/hirez-api-docs)
 - [Java 9 HttpClient](https://www.baeldung.com/java-9-http-client)
 - [Paladins Fandom Wiki](https://paladins.fandom.com/wiki)
+- [Paladins Wrapper](https://github.com/Cristian-Sknz/Paladins-Wrapper)
