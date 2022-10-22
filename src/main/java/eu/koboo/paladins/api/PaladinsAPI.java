@@ -9,6 +9,7 @@ import eu.koboo.paladins.api.data.connectivity.DataStats;
 import eu.koboo.paladins.api.data.connectivity.ServerStatus;
 import eu.koboo.paladins.api.data.items.Item;
 import eu.koboo.paladins.api.data.player.Player;
+import eu.koboo.paladins.api.data.player.PlayerChampion;
 import eu.koboo.paladins.api.request.APIMethod;
 import eu.koboo.paladins.api.request.APIRequest;
 import eu.koboo.paladins.api.request.Language;
@@ -133,8 +134,8 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            ServerStatus status = new ServerStatus(object);
-            list.add(status);
+            ServerStatus entity = new ServerStatus(object);
+            list.add(entity);
         }
         return list;
     }
@@ -167,8 +168,8 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            Champion champion = new Champion(object, language);
-            list.add(champion);
+            Champion entity = new Champion(object, language);
+            list.add(entity);
         }
         return list;
     }
@@ -189,8 +190,8 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            BoardRank boardRank = new BoardRank(object, championId);
-            list.add(boardRank);
+            BoardRank entity = new BoardRank(object, championId);
+            list.add(entity);
         }
         return list;
     }
@@ -209,8 +210,8 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            Skin skin = new Skin(object, championId, language);
-            list.add(skin);
+            Skin entity = new Skin(object, championId, language);
+            list.add(entity);
         }
         return list;
     }
@@ -237,8 +238,8 @@ public class PaladinsAPI {
                     && object.get("item_type").getAsString().startsWith("zDeprecated")) {
                 continue;
             }
-            Item item = new Item(object, language);
-            list.add(item);
+            Item entity = new Item(object, language);
+            list.add(entity);
         }
         return list;
     }
@@ -256,18 +257,23 @@ public class PaladinsAPI {
         return new Player(object);
     }
 
-    public void getPlayerChampions(long playerId) {
+    public List<PlayerChampion> getPlayerChampions(long playerId) {
         Validator.apiMethod(currentSessionId, "getPlayerChampionRanks");
-        String array = APIRequest.create(client, config.getCredentials())
+        List<PlayerChampion> list = new ArrayList<>();
+        JsonArray array = APIRequest.create(client, config.getCredentials())
                 .session(currentSessionId)
                 .method(APIMethod.GET_PLAYER_CHAMPION_RANKS)
                 .playerId(playerId)
-                .asString();
-        System.out.println(array);
+                .asJsonArray();
         if (array == null) {
-            return;
+            return list;
         }
-
+        for (JsonElement element : array) {
+            JsonObject object = (JsonObject) element;
+            PlayerChampion entity = new PlayerChampion(object);
+            list.add(entity);
+        }
+        return list;
     }
 
     public static void main(String[] args) {
