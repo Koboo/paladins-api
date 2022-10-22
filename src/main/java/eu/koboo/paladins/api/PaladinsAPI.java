@@ -8,11 +8,10 @@ import eu.koboo.paladins.api.data.champion.skin.Skin;
 import eu.koboo.paladins.api.data.connectivity.DataStats;
 import eu.koboo.paladins.api.data.connectivity.ServerStatus;
 import eu.koboo.paladins.api.data.items.Item;
-import eu.koboo.paladins.api.data.items.ItemType;
+import eu.koboo.paladins.api.data.player.Player;
 import eu.koboo.paladins.api.request.APIMethod;
 import eu.koboo.paladins.api.request.APIRequest;
 import eu.koboo.paladins.api.request.Language;
-import eu.koboo.paladins.api.request.URLBuilderPlayer;
 import eu.koboo.paladins.api.utils.SessionUtils;
 import eu.koboo.paladins.api.utils.Validator;
 import lombok.AccessLevel;
@@ -244,7 +243,7 @@ public class PaladinsAPI {
         return list;
     }
 
-    public void getPlayer(String player) {
+    public Player getPlayer(String player) {
         Validator.apiMethod(currentSessionId, "getPlayer");
         JsonObject object = APIRequest.create(client, config.getCredentials())
                 .session(currentSessionId)
@@ -252,9 +251,23 @@ public class PaladinsAPI {
                 .player(player)
                 .asFirstJsonObject();
         if (object == null) {
+            return null;
+        }
+        return new Player(object);
+    }
+
+    public void getPlayerChampions(long playerId) {
+        Validator.apiMethod(currentSessionId, "getPlayerChampionRanks");
+        String array = APIRequest.create(client, config.getCredentials())
+                .session(currentSessionId)
+                .method(APIMethod.GET_PLAYER_CHAMPION_RANKS)
+                .playerId(playerId)
+                .asString();
+        System.out.println(array);
+        if (array == null) {
             return;
         }
-        System.out.println(object);
+
     }
 
     public static void main(String[] args) {
@@ -267,6 +280,7 @@ public class PaladinsAPI {
                 false, // get champion leaderboard
                 false, // get champion skins
                 false, // get items
+                true, // get player
         };
 
         System.out.println("=====> Reading properties..");
@@ -351,7 +365,13 @@ public class PaladinsAPI {
             System.out.println("Items: " + itemList.size());
         }
 
-        api.getPlayer("NotKoboo");
+        if(which[8]) {
+            System.out.println("=====> Getting Player..");
+            Player player = api.getPlayer("Muffeltier");
+            System.out.println("Player: " + player.getPlayerId() + " | " + player.getPaladinsName() + " | " + player.getPlatformName());
+
+            api.getPlayerChampions(player.getPlayerId());
+        }
     }
 
 }

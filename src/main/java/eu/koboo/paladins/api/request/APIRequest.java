@@ -49,6 +49,8 @@ public class APIRequest {
     long queue = -1;
     @NonFinal
     String player;
+    @NonFinal
+    long playerId;
 
     public APIRequest session(String sessionId) {
         this.sessionId = sessionId;
@@ -80,13 +82,18 @@ public class APIRequest {
         return this;
     }
 
+    public APIRequest playerId(long playerId) {
+        this.playerId = playerId;
+        return this;
+    }
+
     public String asString() {
         String methodName = method.getName();
         try {
             // Build the needed url
-            String url = method.url(this, language, championId, queue, player);
+            String url = method.url(this, language, championId, queue, player, playerId);
 
-            //System.out.println(url);
+            System.out.println(url);
 
             // Assign default values to the fields to reuse the request object
             sessionId = null;
