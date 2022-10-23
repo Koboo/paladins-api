@@ -125,7 +125,6 @@ public class APIRequest {
 
             // Build the needed url
             String endpointURL = method.getURLBuilder().build(this);
-            System.out.println(endpointURL);
 
             // Assign default values to the fields to reuse the request object
             sessionId = null;
