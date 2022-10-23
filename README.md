@@ -26,7 +26,7 @@ an [issue](/issues), [mail](mailto://admin@koboo.eu) or [pull-request](/pulls).
 respositories {
     maven {
         name 'koboo-reposilite'
-        url 'https://reposilite.koboo.eu'
+        url 'https://reposilite.koboo.eu/releases'
     }
 }
 
