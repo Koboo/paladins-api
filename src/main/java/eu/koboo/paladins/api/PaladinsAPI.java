@@ -20,6 +20,7 @@ import eu.koboo.paladins.api.utils.Validator;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 
 import java.net.http.HttpClient;
 import java.time.Duration;
@@ -30,14 +31,16 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Getter
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PaladinsAPI {
 
     APIConfig config;
     HttpClient client;
     Gson gson;
 
+    @NonFinal
     String currentSessionId;
+    @NonFinal
     long createdSessionTimeStamp;
 
     public PaladinsAPI(APIConfig config) {
