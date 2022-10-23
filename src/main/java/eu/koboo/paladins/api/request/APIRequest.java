@@ -83,8 +83,8 @@ public class APIRequest {
         return this;
     }
 
-    public APIRequest player(String player) {
-        this.playerName = player;
+    public APIRequest playerName(String playerName) {
+        this.playerName = playerName;
         return this;
     }
 
