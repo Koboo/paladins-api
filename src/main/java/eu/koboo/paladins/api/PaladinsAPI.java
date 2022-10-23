@@ -2,7 +2,8 @@ package eu.koboo.paladins.api;
 
 import com.google.gson.*;
 import eu.koboo.paladins.api.config.PropertyConfig;
-import eu.koboo.paladins.api.data.GameMode;
+import eu.koboo.paladins.api.data.champion.ChampionId;
+import eu.koboo.paladins.api.data.match.GameMode;
 import eu.koboo.paladins.api.data.champion.Champion;
 import eu.koboo.paladins.api.data.champion.leaderboard.BoardRank;
 import eu.koboo.paladins.api.data.champion.skin.Skin;
@@ -176,15 +177,17 @@ public class PaladinsAPI {
         return list;
     }
 
-    // Not very fast.
-    public List<BoardRank> getChampionLeaderboard(long championId) {
-        Validator.apiMethod(currentSessionId, "getChampionLeaderboard");
+    public List<BoardRank> getChampionLeaderboardConsole(ChampionId championId) {
+        return getChampionLeaderboardConsole(championId.getId());
+    }
+
+    public List<BoardRank> getChampionLeaderboardConsole(long championId) {
+        Validator.apiMethod(currentSessionId, "getChampionLeaderboardConsole");
         List<BoardRank> list = new ArrayList<>();
         JsonArray array = APIRequest.create(client, config.getCredentials())
                 .session(currentSessionId)
                 .method(APIMethod.GET_CHAMPION_LEADERBOARD)
                 .champion(championId)
-                // Queue is a hardcoded, specified value of the developer documentation
                 .queue(GameMode.COMPETITIVE_LIVE_CONSOLE.getQueueId())
                 .asJsonArray();
         if (array == null) {
@@ -196,6 +199,34 @@ public class PaladinsAPI {
             list.add(entity);
         }
         return list;
+    }
+
+    public List<BoardRank> getChampionLeaderboardPC(ChampionId championId) {
+        return getChampionLeaderboardPC(championId.getId());
+    }
+
+    public List<BoardRank> getChampionLeaderboardPC(long championId) {
+        Validator.apiMethod(currentSessionId, "getChampionLeaderboardPC");
+        List<BoardRank> list = new ArrayList<>();
+        JsonArray array = APIRequest.create(client, config.getCredentials())
+                .session(currentSessionId)
+                .method(APIMethod.GET_CHAMPION_LEADERBOARD)
+                .champion(championId)
+                .queue(GameMode.COMPETITIVE_LIVE_PC.getQueueId())
+                .asJsonArray();
+        if (array == null) {
+            return list;
+        }
+        for (JsonElement element : array) {
+            JsonObject object = (JsonObject) element;
+            BoardRank entity = new BoardRank(object, championId);
+            list.add(entity);
+        }
+        return list;
+    }
+
+    public List<Skin> getChampionSkins(Language language, ChampionId championId) {
+        return getChampionSkins(language, championId.getId());
     }
 
     public List<Skin> getChampionSkins(Language language, long championId) {
@@ -246,17 +277,21 @@ public class PaladinsAPI {
         return list;
     }
 
-    public Player getPlayer(String player) {
+    public Player getPlayer(String playerName) {
         Validator.apiMethod(currentSessionId, "getPlayer");
         JsonObject object = APIRequest.create(client, config.getCredentials())
                 .session(currentSessionId)
                 .method(APIMethod.GET_PLAYER)
-                .player(player)
+                .playerName(playerName)
                 .asFirstJsonObject();
         if (object == null) {
             return null;
         }
         return new Player(object);
+    }
+
+    public List<PlayerChampion> getPlayerChampions(Player player) {
+        return getPlayerChampions(player.getActivePlayerId());
     }
 
     public List<PlayerChampion> getPlayerChampions(long playerId) {
@@ -278,8 +313,16 @@ public class PaladinsAPI {
         return list;
     }
 
+    public List<MatchId> getMatchIdByQueue(GameMode gameMode, long timeStamp, Hours hours) {
+        return getMatchIdByQueue(gameMode.getQueueId(), timeStamp, hours, null);
+    }
+
     public List<MatchId> getMatchIdByQueue(GameMode gameMode, long timeStamp, Hours hours, Minutes minutes) {
         return getMatchIdByQueue(gameMode.getQueueId(), timeStamp, hours, minutes);
+    }
+
+    public List<MatchId> getMatchIdByQueue(int queueId, long timeStamp, Hours hours) {
+        return getMatchIdByQueue(queueId, timeStamp, hours, null);
     }
 
     public List<MatchId> getMatchIdByQueue(int queueId, long timeStamp, Hours hours, Minutes minutes) {
@@ -304,7 +347,11 @@ public class PaladinsAPI {
         return list;
     }
 
-    public List<MatchPlayer> getMatchDetails(long matchId) {
+    public List<MatchPlayer> getMatchDetailsBatch(MatchId matchId) {
+        return getMatchDetailsBatch(matchId.getMatchId());
+    }
+
+    public List<MatchPlayer> getMatchDetailsBatch(long matchId) {
         Validator.apiMethod(currentSessionId, "getMatchDetails");
         List<MatchPlayer> list = new ArrayList<>();
         JsonArray array = APIRequest.create(client, config.getCredentials())
@@ -323,8 +370,8 @@ public class PaladinsAPI {
         return list;
     }
 
-    public List<MatchPlayer> getMatchDetails(List<Long> matchIdList) {
-        Validator.apiMethod(currentSessionId, "getMatchDetails(Batch)");
+    public List<MatchPlayer> getMatchDetailsBatch(List<Long> matchIdList) {
+        Validator.apiMethod(currentSessionId, "getMatchDetailsBatch");
         List<MatchPlayer> list = new ArrayList<>();
         JsonArray array = APIRequest.create(client, config.getCredentials())
                 .session(currentSessionId)
@@ -349,11 +396,11 @@ public class PaladinsAPI {
                 false, // server status list
                 false, // patch info
                 false, // get all champions
-                false, // get champion leaderboard
+                true, // get champion leaderboard
                 false, // get champion skins
                 false, // get items
                 false, // get player
-                true, // get match
+                false, // get match
         };
 
         System.out.println("=====> Reading properties..");
@@ -421,7 +468,7 @@ public class PaladinsAPI {
 
         if (which[5]) {
             System.out.println("=====> Getting ChampionLeaderboard (" + ioChampionId + ")..");
-            List<BoardRank> boardRankList = api.getChampionLeaderboard(ioChampionId);
+            List<BoardRank> boardRankList = api.getChampionLeaderboardConsole(ioChampionId);
             System.out.println("BoardRanks: " + boardRankList.size());
             System.out.println("First Place: " + boardRankList.get(0).getPlayerName());
         }
@@ -455,7 +502,7 @@ public class PaladinsAPI {
             System.out.println("Second Match: " + second);
             long third = matchIdList.get(2).getMatchId();
             System.out.println("Third Match: " + third);
-            List<MatchPlayer> matchDetails = api.getMatchDetails(Arrays.asList(first, second, third));
+            List<MatchPlayer> matchDetails = api.getMatchDetailsBatch(Arrays.asList(first, second, third));
             System.out.println("Players in Match: " + matchDetails.size());
         }
     }
