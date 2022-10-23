@@ -14,6 +14,14 @@ public record WrappedResult(String value) {
         return new WrappedResult(value);
     }
 
+    public boolean isNull() {
+        return value == null;
+    }
+
+    public boolean isNotNull() {
+        return value != null;
+    }
+
     public String asString() {
         return value;
     }

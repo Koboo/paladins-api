@@ -11,7 +11,7 @@ public class PropertyConfig {
         try {
             File file = new File(filePath);
             if (!file.exists()) {
-                throw new FileNotFoundException("File \"" + filePath + "\" doesn't exists.");
+                return PropertyConfig.empty();
             }
             InputStream stream = new FileInputStream(file);
             Properties properties = new Properties();
