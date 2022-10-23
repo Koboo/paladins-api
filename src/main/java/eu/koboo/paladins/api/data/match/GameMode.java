@@ -1,4 +1,4 @@
-package eu.koboo.paladins.api.data;
+package eu.koboo.paladins.api.data.match;
 
 import lombok.AccessLevel;
 import lombok.Getter;
