@@ -31,8 +31,10 @@ public enum APIMethod {
     GET_PLAYER("getplayer", new URLBuilderPlayerName()),
     GET_PLAYER_CHAMPION_RANKS("getchampionranks", new URLBuilderPlayerId()),
 
-    // Unsupported and deprecated by this API. Use APIMethod.GET_ITEMS instead.,
-    GET_CHAMPION_CARDS("getchampioncards", new URLBuilderChampion()),
+    /* Matches */
+    GET_MATCH_IDS_BY_QUEUE("getmatchidsbyqueue", new URLBuilderQueueMatchIds()),
+    GET_MATCH_DETAILS("getmatchdetails", new URLBuilderMatchId()),
+    GET_MATCH_DETAILS_BATCH("getmatchdetailsbatch", new URLBuilderMatchIdList()),
 
     ;
 
@@ -41,29 +43,8 @@ public enum APIMethod {
     String name;
     URLBuilder urlBuilder;
 
-    public String url(APIRequest request, Language language, long championId, long queue, String player, long playerId) {
-
-        if (urlBuilder instanceof URLBuilderLanguage languageBuilder) {
-            return languageBuilder.build(request, this, language);
-        }
-
-        if (urlBuilder instanceof URLBuilderChampion championBuilder) {
-            return championBuilder.build(request, this, language, championId);
-        }
-
-        if (urlBuilder instanceof URLBuilderLeaderboard leaderboardBuilder) {
-            return leaderboardBuilder.build(request, this, championId, queue);
-        }
-
-        if(urlBuilder instanceof URLBuilderPlayerName playerBuilder) {
-            return playerBuilder.build(request, this, player);
-        }
-
-        if(urlBuilder instanceof URLBuilderPlayerId playerIdBuilder) {
-            return playerIdBuilder.build(request, this, playerId);
-        }
-
-        return urlBuilder.build(request, this);
+    public URLBuilder getURLBuilder() {
+        return urlBuilder;
     }
 
     public static String createSignature(String devId, String authKey, String methodCall, String currentDate) {

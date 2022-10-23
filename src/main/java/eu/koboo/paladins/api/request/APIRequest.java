@@ -15,6 +15,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -25,15 +26,10 @@ public class APIRequest {
         return create(client, null);
     }
 
-    public static APIRequest create(HttpClient client, String devId, String authKey) {
-        return create(client, new APICredentials(devId, authKey));
-    }
-
     public static APIRequest create(HttpClient client, APICredentials credentials) {
         return new APIRequest(client, credentials);
     }
 
-    //PaladinsAPI api;
     HttpClient client;
     APICredentials credentials;
 
@@ -48,9 +44,19 @@ public class APIRequest {
     @NonFinal
     long queue = -1;
     @NonFinal
-    String player;
+    String playerName;
     @NonFinal
     long playerId;
+    @NonFinal
+    long timeStamp = -1;
+    @NonFinal
+    Hours hours;
+    @NonFinal
+    Minutes minutes;
+    @NonFinal
+    long matchId;
+    @NonFinal
+    List<Long> matchIdList;
 
     public APIRequest session(String sessionId) {
         this.sessionId = sessionId;
@@ -78,7 +84,7 @@ public class APIRequest {
     }
 
     public APIRequest player(String player) {
-        this.player = player;
+        this.playerName = player;
         return this;
     }
 
@@ -87,13 +93,39 @@ public class APIRequest {
         return this;
     }
 
+    public APIRequest timeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+        return this;
+    }
+
+    public APIRequest hours(Hours hours) {
+        this.hours = hours;
+        return this;
+    }
+
+    public APIRequest minutes(Minutes minutes) {
+        this.minutes = minutes;
+        return this;
+    }
+
+    public APIRequest matchId(long matchId) {
+        this.matchId = matchId;
+        return this;
+    }
+
+    public APIRequest matchIdList(List<Long> matchIdList) {
+        this.matchIdList = matchIdList;
+        return this;
+    }
+
     public String asString() {
         String methodName = method.getName();
         try {
-            // Build the needed url
-            String url = method.url(this, language, championId, queue, player, playerId);
 
-            System.out.println(url);
+
+            // Build the needed url
+            String endpointURL = method.getURLBuilder().build(this);
+            System.out.println(endpointURL);
 
             // Assign default values to the fields to reuse the request object
             sessionId = null;
@@ -101,10 +133,15 @@ public class APIRequest {
             language = Language.ENGLISH;
             championId = -1;
             queue = -1;
-            player = null;
+            playerName = null;
+            playerId = -1;
+            timeStamp = -1;
+            hours = null;
+            minutes = null;
+            matchId = -1;
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
+                    .uri(URI.create(endpointURL))
                     .GET()
                     .build();
 
