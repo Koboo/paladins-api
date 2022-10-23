@@ -30,7 +30,7 @@ public class PlayerChampion {
         try {
             this.playerId = Long.parseLong(object.get("player_id").getAsString());
             this.championId = Long.parseLong(object.get("champion_id").getAsString());
-            this.lastTimePlayed = DateFormatter.parseFrom(object.get("champion_id").getAsString());
+            this.lastTimePlayed = DateFormatter.parseFrom(object.get("LastPlayed").getAsString());
             this.rank = object.get("Rank").getAsLong();
             this.minutesPlayed = object.get("Minutes").getAsLong();
 
@@ -39,7 +39,7 @@ public class PlayerChampion {
             this.assists = object.get("Assists").getAsLong();
             this.losses = object.get("Losses").getAsLong();
             this.wins = object.get("Wins").getAsLong();
-            this.worshippers = object.get("Total_Worshippers").getAsLong();
+            this.worshippers = object.get("Worshippers").getAsLong();
             this.gold = object.get("Gold").getAsLong();
             this.minionKills = object.get("MinionKills").getAsLong();
         } catch (Exception e) {
