@@ -2,17 +2,18 @@ package eu.koboo.paladins.api;
 
 import com.google.gson.*;
 import eu.koboo.paladins.api.config.PropertyConfig;
+import eu.koboo.paladins.api.data.GameMode;
 import eu.koboo.paladins.api.data.champion.Champion;
 import eu.koboo.paladins.api.data.champion.leaderboard.BoardRank;
 import eu.koboo.paladins.api.data.champion.skin.Skin;
 import eu.koboo.paladins.api.data.connectivity.DataStats;
 import eu.koboo.paladins.api.data.connectivity.ServerStatus;
 import eu.koboo.paladins.api.data.items.Item;
+import eu.koboo.paladins.api.data.match.MatchId;
+import eu.koboo.paladins.api.data.match.MatchPlayer;
 import eu.koboo.paladins.api.data.player.Player;
 import eu.koboo.paladins.api.data.player.PlayerChampion;
-import eu.koboo.paladins.api.request.APIMethod;
-import eu.koboo.paladins.api.request.APIRequest;
-import eu.koboo.paladins.api.request.Language;
+import eu.koboo.paladins.api.request.*;
 import eu.koboo.paladins.api.utils.SessionUtils;
 import eu.koboo.paladins.api.utils.Validator;
 import lombok.AccessLevel;
@@ -23,6 +24,7 @@ import java.net.http.HttpClient;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -183,7 +185,7 @@ public class PaladinsAPI {
                 .method(APIMethod.GET_CHAMPION_LEADERBOARD)
                 .champion(championId)
                 // Queue is a hardcoded, specified value of the developer documentation
-                .queue(428)
+                .queue(GameMode.COMPETITIVE_LIVE_CONSOLE.getQueueId())
                 .asJsonArray();
         if (array == null) {
             return list;
@@ -276,6 +278,70 @@ public class PaladinsAPI {
         return list;
     }
 
+    public List<MatchId> getMatchIdByQueue(GameMode gameMode, long timeStamp, Hours hours, Minutes minutes) {
+        return getMatchIdByQueue(gameMode.getQueueId(), timeStamp, hours, minutes);
+    }
+
+    public List<MatchId> getMatchIdByQueue(int queueId, long timeStamp, Hours hours, Minutes minutes) {
+        Validator.apiMethod(currentSessionId, "getMatchIdByQueue");
+        List<MatchId> list = new ArrayList<>();
+        JsonArray array = APIRequest.create(client, config.getCredentials())
+                .session(currentSessionId)
+                .method(APIMethod.GET_MATCH_IDS_BY_QUEUE)
+                .queue(queueId)
+                .timeStamp(timeStamp)
+                .hours(hours)
+                .minutes(minutes)
+                .asJsonArray();
+        if (array == null) {
+            return list;
+        }
+        for (JsonElement element : array) {
+            JsonObject object = (JsonObject) element;
+            MatchId entity = new MatchId(object);
+            list.add(entity);
+        }
+        return list;
+    }
+
+    public List<MatchPlayer> getMatchDetails(long matchId) {
+        Validator.apiMethod(currentSessionId, "getMatchDetails");
+        List<MatchPlayer> list = new ArrayList<>();
+        JsonArray array = APIRequest.create(client, config.getCredentials())
+                .session(currentSessionId)
+                .method(APIMethod.GET_MATCH_DETAILS)
+                .matchId(matchId)
+                .asJsonArray();
+        if (array == null) {
+            return list;
+        }
+        for (JsonElement element : array) {
+            JsonObject object = (JsonObject) element;
+            MatchPlayer entity = new MatchPlayer(object);
+            list.add(entity);
+        }
+        return list;
+    }
+
+    public List<MatchPlayer> getMatchDetails(List<Long> matchIdList) {
+        Validator.apiMethod(currentSessionId, "getMatchDetails(Batch)");
+        List<MatchPlayer> list = new ArrayList<>();
+        JsonArray array = APIRequest.create(client, config.getCredentials())
+                .session(currentSessionId)
+                .method(APIMethod.GET_MATCH_DETAILS_BATCH)
+                .matchIdList(matchIdList)
+                .asJsonArray();
+        if (array == null) {
+            return list;
+        }
+        for (JsonElement element : array) {
+            JsonObject object = (JsonObject) element;
+            MatchPlayer entity = new MatchPlayer(object);
+            list.add(entity);
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         boolean[] which = new boolean[]{
                 false, // ping
@@ -286,7 +352,8 @@ public class PaladinsAPI {
                 false, // get champion leaderboard
                 false, // get champion skins
                 false, // get items
-                true, // get player
+                false, // get player
+                true, // get match
         };
 
         System.out.println("=====> Reading properties..");
@@ -375,8 +442,21 @@ public class PaladinsAPI {
             System.out.println("=====> Getting Player..");
             Player player = api.getPlayer("Muffeltier");
             System.out.println("Player: " + player.getPlayerId() + " | " + player.getPaladinsName() + " | " + player.getPlatformName());
+            List<PlayerChampion> list = api.getPlayerChampions(player.getPlayerId());
+            System.out.println("Played Champions: " + list.size());
+        }
 
-            api.getPlayerChampions(player.getPlayerId());
+        if(which[9]) {
+            List<MatchId> matchIdList = api.getMatchIdByQueue(GameMode.SIEGE_CASUAL.getQueueId(), System.currentTimeMillis(), Hours.TEN, null);
+            System.out.println("MatchIds: " + matchIdList.size());
+            long first = matchIdList.get(0).getMatchId();
+            System.out.println("First Match: " + first);
+            long second = matchIdList.get(1).getMatchId();
+            System.out.println("Second Match: " + second);
+            long third = matchIdList.get(2).getMatchId();
+            System.out.println("Third Match: " + third);
+            List<MatchPlayer> matchDetails = api.getMatchDetails(Arrays.asList(first, second, third));
+            System.out.println("Players in Match: " + matchDetails.size());
         }
     }
 
