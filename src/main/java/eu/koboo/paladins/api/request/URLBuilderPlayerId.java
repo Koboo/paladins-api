@@ -1,9 +1,12 @@
 package eu.koboo.paladins.api.request;
 
+import eu.koboo.paladins.api.exceptions.URLParameterException;
+
 public class URLBuilderPlayerId extends URLBuilderSession {
 
-    public String build(APIRequest request, APIMethod method, long playerId) {
-        String prebuildUrl = super.build(request, method);
-        return prebuildUrl + "/" + playerId;
+    @Override
+    public String build(APIRequest request) throws URLParameterException {
+        String prebuildUrl = super.build(request);
+        return prebuildUrl + "/" + request.getPlayerId();
     }
 }
