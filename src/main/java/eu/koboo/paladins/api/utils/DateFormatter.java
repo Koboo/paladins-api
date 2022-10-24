@@ -8,6 +8,8 @@ public class DateFormatter {
 
     // Used for the url timeStamp parameter
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
+    // Used by the api-endpoint "gethirezserverstatus"
+    private static final SimpleDateFormat STATUS_PARSE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     // Used by the api-endpoints for date-fields
     private static final SimpleDateFormat API_PARSE_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss a");
     // Used by the api-paths as parameter
@@ -24,6 +26,14 @@ public class DateFormatter {
     public static long parseFrom(String string) {
         try {
             return API_PARSE_DATE_FORMAT.parse(string).getTime();
+        } catch (Exception e) {
+            throw new RuntimeException("Couldn't parse date from string \"" + string + "\": ", e);
+        }
+    }
+
+    public static long parseFromServerStatus(String string) {
+        try {
+            return STATUS_PARSE_DATE_FORMAT.parse(string).getTime();
         } catch (Exception e) {
             throw new RuntimeException("Couldn't parse date from string \"" + string + "\": ", e);
         }

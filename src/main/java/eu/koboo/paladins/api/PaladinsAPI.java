@@ -2,7 +2,14 @@ package eu.koboo.paladins.api;
 
 import com.google.gson.*;
 import eu.koboo.paladins.api.config.PropertyConfig;
+import eu.koboo.paladins.api.data.champion.ChampionDeserializer;
 import eu.koboo.paladins.api.data.champion.ChampionId;
+import eu.koboo.paladins.api.data.champion.ability.Ability;
+import eu.koboo.paladins.api.data.champion.ability.AbilityDeserializer;
+import eu.koboo.paladins.api.data.champion.leaderboard.BoardRankDeserializer;
+import eu.koboo.paladins.api.data.champion.skin.SkinDeserializer;
+import eu.koboo.paladins.api.data.connectivity.DataStatsDeserializer;
+import eu.koboo.paladins.api.data.connectivity.ServerStatusDeserializer;
 import eu.koboo.paladins.api.data.items.ItemDeserializer;
 import eu.koboo.paladins.api.data.match.*;
 import eu.koboo.paladins.api.data.champion.Champion;
@@ -61,6 +68,12 @@ public class PaladinsAPI {
                 .registerTypeAdapter(MatchPlayer.class, new MatchPlayerDeserializer())
                 .registerTypeAdapter(Player.class, new PlayerDeserializer())
                 .registerTypeAdapter(PlayerChampion.class, new PlayerChampionDeserializer())
+                .registerTypeAdapter(ServerStatus.class, new ServerStatusDeserializer())
+                .registerTypeAdapter(DataStats.class, new DataStatsDeserializer())
+                .registerTypeAdapter(BoardRank.class, new BoardRankDeserializer())
+                .registerTypeAdapter(Ability.class, new AbilityDeserializer())
+                .registerTypeAdapter(Champion.class, new ChampionDeserializer())
+                .registerTypeAdapter(Skin.class, new SkinDeserializer())
                 .create();
 
         // Assign default values to the session related fields
@@ -139,7 +152,7 @@ public class PaladinsAPI {
         if (object == null) {
             return null;
         }
-        return new DataStats(object);
+        return gson.fromJson(object, DataStats.class);
     }
 
     public List<ServerStatus> getServerStatusList() {
@@ -154,7 +167,7 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            ServerStatus entity = new ServerStatus(object);
+            ServerStatus entity = gson.fromJson(object, ServerStatus.class);
             list.add(entity);
         }
         return list;
@@ -188,7 +201,9 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            Champion entity = new Champion(object, language);
+            Champion entity = gson.fromJson(object, Champion.class);
+            entity.setLanguage(language);
+            entity.getAllAbilities().forEach(ability -> ability.setLanguage(language));
             list.add(entity);
         }
         return list;
@@ -212,7 +227,7 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            BoardRank entity = new BoardRank(object, championId);
+            BoardRank entity = gson.fromJson(object, BoardRank.class);
             list.add(entity);
         }
         return list;
@@ -236,7 +251,7 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            BoardRank entity = new BoardRank(object, championId);
+            BoardRank entity = gson.fromJson(object, BoardRank.class);
             list.add(entity);
         }
         return list;
@@ -260,7 +275,8 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            Skin entity = new Skin(object, championId, language);
+            Skin entity = gson.fromJson(object, Skin.class);
+            entity.setLanguage(language);
             list.add(entity);
         }
         return list;
@@ -462,7 +478,7 @@ public class PaladinsAPI {
             System.out.println("=====> Getting ServerStatus..");
             List<ServerStatus> serverStatusList = api.getServerStatusList();
             for (ServerStatus serverStatus : serverStatusList) {
-                System.out.println("Server: " + serverStatus.getPlatform().name() + " | " + serverStatus.getStatusText());
+                System.out.println("Server: " + serverStatus.getPlatform() + " | " + serverStatus.getStatusText());
                 System.out.println("  - Version: " + serverStatus.getVersion());
                 System.out.println("  - Entry-Timestamp: " + serverStatus.getEntryTimeStamp());
                 System.out.println("  - Environment: " + serverStatus.getEnvironment().name());

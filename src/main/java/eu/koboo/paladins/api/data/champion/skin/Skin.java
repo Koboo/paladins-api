@@ -5,10 +5,14 @@ import eu.koboo.paladins.api.exceptions.DataParseException;
 import eu.koboo.paladins.api.request.Language;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 @Getter
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class Skin {
 
     long championId;
@@ -21,25 +25,4 @@ public class Skin {
     Language language;
     String skinName;
     String skinNameEnglish;
-
-    public Skin(JsonObject object, long championId, Language language) {
-        try {
-            if (championId != -1) {
-                this.championId = championId;
-            } else {
-                this.championId = Long.parseLong(object.get("champion_id").getAsString());
-            }
-            this.championName = object.get("champion_name").getAsString();
-            this.rarity = Rarity.parse(object.get("rarity").getAsString());
-
-            this.skinId1 = object.get("skin_id1").getAsLong();
-            this.skinId2 = object.get("skin_id2").getAsLong();
-
-            this.language = language;
-            this.skinName = object.get("skin_name").getAsString();
-            this.skinNameEnglish = object.get("skin_name_english").getAsString();
-        } catch (Exception e) {
-            throw new DataParseException(this.getClass(), e);
-        }
-    }
 }

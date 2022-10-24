@@ -5,12 +5,16 @@ import eu.koboo.paladins.api.exceptions.DataParseException;
 import eu.koboo.paladins.api.request.Language;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Locale;
 
 @Getter
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class Ability {
 
     Language language;
