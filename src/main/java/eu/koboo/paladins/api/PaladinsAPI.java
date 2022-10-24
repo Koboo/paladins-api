@@ -97,13 +97,14 @@ public class PaladinsAPI {
                 .method(APIMethod.CREATE_SESSION));
         // Check result
         Validator.notNull(sessionId, "Couldn't create new sessionId.");
-        if(!isSessionValid()) {
-            throw new RuntimeException("Created new session, but it's invalid.");
-        }
 
         // Assign new sessionId and timeStamp
         this.currentSessionId = sessionId;
         this.createdSessionTimeStamp = System.currentTimeMillis();
+
+        if(!isSessionValid()) {
+            throw new RuntimeException("Created new session, but it's invalid.");
+        }
 
         // Check and call new sessionId Consumer
         if (config.getNewSessionIdConsumer() == null) {
