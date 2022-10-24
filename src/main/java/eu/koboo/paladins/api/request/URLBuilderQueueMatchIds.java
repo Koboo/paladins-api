@@ -8,9 +8,9 @@ public class URLBuilderQueueMatchIds extends URLBuilderSession {
     @Override
     public String build(APIRequest request) throws URLParameterException {
         String prebuildUrl = super.build(request);
-        String hourSegment = request.getHours().getValue();
+        String hourSegment = request.getHours();
         if(request.getMinutes() != null) {
-            hourSegment += "," + request.getMinutes().getValue();
+            hourSegment += "," + request.getMinutes();
         }
         return prebuildUrl + "/" + request.getQueue() + "/" + DateFormatter.formatPathDate(request.getTimeStamp()) + "/" + hourSegment;
     }

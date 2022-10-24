@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 public enum Hours {
 
+    DAY("-1"),
     ONE("1"),
     TWO("2"),
     THREE("3"),
@@ -35,4 +36,8 @@ public enum Hours {
     TWENTY_THREE("23");
 
     String value;
+
+    public static Hours current() {
+        return TWELVE;
+    }
 }

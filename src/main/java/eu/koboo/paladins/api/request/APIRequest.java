@@ -50,9 +50,9 @@ public class APIRequest {
     @NonFinal
     long timeStamp = -1;
     @NonFinal
-    Hours hours;
+    String hours;
     @NonFinal
-    Minutes minutes;
+    String minutes;
     @NonFinal
     long matchId;
     @NonFinal
@@ -98,12 +98,12 @@ public class APIRequest {
         return this;
     }
 
-    public APIRequest hours(Hours hours) {
+    public APIRequest hours(String hours) {
         this.hours = hours;
         return this;
     }
 
-    public APIRequest minutes(Minutes minutes) {
+    public APIRequest minutes(String minutes) {
         this.minutes = minutes;
         return this;
     }
