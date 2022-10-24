@@ -3,17 +3,18 @@ package eu.koboo.paladins.api;
 import com.google.gson.*;
 import eu.koboo.paladins.api.config.PropertyConfig;
 import eu.koboo.paladins.api.data.champion.ChampionId;
-import eu.koboo.paladins.api.data.match.GameMode;
+import eu.koboo.paladins.api.data.items.ItemDeserializer;
+import eu.koboo.paladins.api.data.match.*;
 import eu.koboo.paladins.api.data.champion.Champion;
 import eu.koboo.paladins.api.data.champion.leaderboard.BoardRank;
 import eu.koboo.paladins.api.data.champion.skin.Skin;
 import eu.koboo.paladins.api.data.connectivity.DataStats;
 import eu.koboo.paladins.api.data.connectivity.ServerStatus;
 import eu.koboo.paladins.api.data.items.Item;
-import eu.koboo.paladins.api.data.match.MatchId;
-import eu.koboo.paladins.api.data.match.MatchPlayer;
 import eu.koboo.paladins.api.data.player.Player;
 import eu.koboo.paladins.api.data.player.PlayerChampion;
+import eu.koboo.paladins.api.data.player.PlayerChampionDeserializer;
+import eu.koboo.paladins.api.data.player.PlayerDeserializer;
 import eu.koboo.paladins.api.request.*;
 import eu.koboo.paladins.api.utils.SessionUtils;
 import eu.koboo.paladins.api.utils.Validator;
@@ -55,6 +56,11 @@ public class PaladinsAPI {
         // Parse result into java objects
         this.gson = new GsonBuilder()
                 .setPrettyPrinting()
+                .registerTypeAdapter(Item.class, new ItemDeserializer())
+                .registerTypeAdapter(MatchId.class, new MatchIdDeserializer())
+                .registerTypeAdapter(MatchPlayer.class, new MatchPlayerDeserializer())
+                .registerTypeAdapter(Player.class, new PlayerDeserializer())
+                .registerTypeAdapter(PlayerChampion.class, new PlayerChampionDeserializer())
                 .create();
 
         // Assign default values to the session related fields
@@ -282,7 +288,8 @@ public class PaladinsAPI {
                     && object.get("item_type").getAsString().startsWith("zDeprecated")) {
                 continue;
             }
-            Item entity = new Item(object, language);
+            Item entity = gson.fromJson(object, Item.class);
+            entity.setLanguage(language);
             list.add(entity);
         }
         return list;
@@ -298,7 +305,7 @@ public class PaladinsAPI {
         if (object == null) {
             return null;
         }
-        return new Player(object);
+        return gson.fromJson(object, Player.class);
     }
 
     public List<PlayerChampion> getPlayerChampions(Player player) {
@@ -318,7 +325,7 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            PlayerChampion entity = new PlayerChampion(object);
+            PlayerChampion entity = gson.fromJson(object, PlayerChampion.class);
             list.add(entity);
         }
         return list;
@@ -352,7 +359,7 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            MatchId entity = new MatchId(object);
+            MatchId entity = gson.fromJson(object, MatchId.class);
             list.add(entity);
         }
         return list;
@@ -375,7 +382,7 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            MatchPlayer entity = new MatchPlayer(object);
+            MatchPlayer entity = gson.fromJson(object, MatchPlayer.class);
             list.add(entity);
         }
         return list;
@@ -394,7 +401,7 @@ public class PaladinsAPI {
         }
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
-            MatchPlayer entity = new MatchPlayer(object);
+            MatchPlayer entity = gson.fromJson(object, MatchPlayer.class);
             list.add(entity);
         }
         return list;
