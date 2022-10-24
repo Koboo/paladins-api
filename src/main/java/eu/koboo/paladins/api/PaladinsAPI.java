@@ -43,7 +43,7 @@ public class PaladinsAPI {
     @NonFinal
     long createdSessionTimeStamp;
 
-    public PaladinsAPI(APIConfig config) {
+    protected PaladinsAPI(APIConfig config) {
         // Configuration of the API
         this.config = config;
 
@@ -67,32 +67,39 @@ public class PaladinsAPI {
         }
     }
 
+    public boolean isSessionValid() {
+        return SessionUtils.isValidSession(APIRequest.create(client, config.getCredentials())
+                .session(currentSessionId)
+                .method(APIMethod.TEST_SESSION));
+    }
+
     public void refreshSession() {
-        // Create a new request object
-        APIRequest request = APIRequest.create(client, config.getCredentials());
         // If current sessionId is null, create a new session
         if (currentSessionId == null) {
-            createNewSession(request);
+            createNewSession();
             return;
         }
         // If session is invalid by time, create a new session (reduce requests, if we already know it's invalid)
         long sessionValidUntilTimeStamp = createdSessionTimeStamp + TimeUnit.MINUTES.toMillis(15);
         if (System.currentTimeMillis() >= sessionValidUntilTimeStamp) {
-            createNewSession(request);
+            createNewSession();
             return;
         }
         // If session is invalid by request, create a new session
-        boolean isValidSession = SessionUtils.isValidSession(request.session(currentSessionId).method(APIMethod.TEST_SESSION));
-        if (!isValidSession) {
-            createNewSession(request);
+        if (!isSessionValid()) {
+            createNewSession();
         }
     }
 
-    private void createNewSession(APIRequest apiRequest) {
+    public void createNewSession() {
         // Parse the sessionId by request
-        String sessionId = SessionUtils.parseSessionId(apiRequest.method(APIMethod.CREATE_SESSION));
+        String sessionId = SessionUtils.parseSessionId(APIRequest.create(client, config.getCredentials())
+                .method(APIMethod.CREATE_SESSION));
         // Check result
         Validator.notNull(sessionId, "Couldn't create new sessionId.");
+        if(!isSessionValid()) {
+            throw new RuntimeException("Created new session, but it's invalid.");
+        }
 
         // Assign new sessionId and timeStamp
         this.currentSessionId = sessionId;
@@ -417,7 +424,7 @@ public class PaladinsAPI {
         Validator.notNull(devId, "AuthKey is null");
 
         System.out.println("=====> Creating API wrapper..");
-        PaladinsAPI api = new PaladinsAPI(APIConfig.of(devId, authKey)
+        PaladinsAPI api = new PaladinsAPI(APIConfig.builder(devId, authKey)
                 .requestTimeout(10)
                 .sessionId(config.get("sessionId").asString())
                 .refreshSessionOnStartup(true)

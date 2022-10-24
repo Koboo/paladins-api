@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 @Getter(AccessLevel.PROTECTED)
 public class APIConfig {
 
-    public static APIConfig of(String devId, String authKey) {
+    public static APIConfig builder(String devId, String authKey) {
         return new APIConfig(new APICredentials(devId, authKey));
     }
 
@@ -52,5 +52,9 @@ public class APIConfig {
     public APIConfig refreshSessionOnStartup(boolean value) {
         this.refreshSessionOnStartup = value;
         return this;
+    }
+
+    public PaladinsAPI create() {
+        return new PaladinsAPI(this);
     }
 }
