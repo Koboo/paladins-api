@@ -1,7 +1,5 @@
 package eu.koboo.paladins.api.data.champion.skin;
 
-import com.google.gson.JsonObject;
-import eu.koboo.paladins.api.exceptions.DataParseException;
 import eu.koboo.paladins.api.request.Language;
 import lombok.AccessLevel;
 import lombok.Getter;

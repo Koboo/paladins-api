@@ -1,7 +1,5 @@
 package eu.koboo.paladins.api.data.champion.leaderboard;
 
-import com.google.gson.JsonObject;
-import eu.koboo.paladins.api.exceptions.DataParseException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -4,7 +4,6 @@ package eu.koboo.paladins.api.data.champion;
 import com.google.gson.*;
 import eu.koboo.paladins.api.data.champion.ability.Ability;
 import eu.koboo.paladins.api.data.champion.ability.AbilityType;
-import eu.koboo.paladins.api.data.champion.leaderboard.BoardRank;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

@@ -1,7 +1,6 @@
 package eu.koboo.paladins.api.data.connectivity;
 
 import com.google.gson.*;
-import eu.koboo.paladins.api.utils.DateFormatter;
 
 import java.lang.reflect.Type;
 

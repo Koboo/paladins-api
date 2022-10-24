@@ -3,14 +3,8 @@
 package eu.koboo.paladins.api.data.champion.skin;
 
 import com.google.gson.*;
-import eu.koboo.paladins.api.data.champion.Champion;
-import eu.koboo.paladins.api.data.champion.Role;
-import eu.koboo.paladins.api.data.champion.ability.Ability;
-import eu.koboo.paladins.api.data.champion.ability.AbilityType;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SkinDeserializer implements JsonDeserializer<Skin> {
 

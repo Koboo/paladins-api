@@ -2,8 +2,6 @@
 package eu.koboo.paladins.api.data.player;
 
 import com.google.gson.*;
-import eu.koboo.paladins.api.data.items.Item;
-import eu.koboo.paladins.api.data.items.ItemType;
 import eu.koboo.paladins.api.utils.DateFormatter;
 
 import java.lang.reflect.Type;

@@ -2,7 +2,6 @@
 package eu.koboo.paladins.api.data.champion.leaderboard;
 
 import com.google.gson.*;
-import eu.koboo.paladins.api.data.connectivity.DataStats;
 
 import java.lang.reflect.Type;
 

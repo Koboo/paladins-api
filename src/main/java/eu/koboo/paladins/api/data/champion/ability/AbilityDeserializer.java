@@ -2,7 +2,6 @@
 package eu.koboo.paladins.api.data.champion.ability;
 
 import com.google.gson.*;
-import eu.koboo.paladins.api.data.champion.leaderboard.BoardRank;
 
 import java.lang.reflect.Type;
 import java.util.Locale;

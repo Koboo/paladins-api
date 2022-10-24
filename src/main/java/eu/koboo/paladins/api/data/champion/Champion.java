@@ -1,9 +1,7 @@
 package eu.koboo.paladins.api.data.champion;
 
-import com.google.gson.JsonObject;
 import eu.koboo.paladins.api.data.champion.ability.Ability;
 import eu.koboo.paladins.api.data.champion.ability.AbilityType;
-import eu.koboo.paladins.api.exceptions.DataParseException;
 import eu.koboo.paladins.api.request.Language;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,7 +11,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter
