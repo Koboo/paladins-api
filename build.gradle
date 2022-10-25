@@ -9,10 +9,17 @@ version "$projectVersion"
 
 repositories {
     mavenCentral()
+    maven {
+        name 'koboo-reposilite'
+        url 'https://reposilite.koboo.eu/releases'
+    }
 }
 
 dependencies {
     implementation "com.google.code.gson:gson:$gsonVersion"
+
+    testImplementation "com.google.code.gson:gson:$gsonVersion"
+    testImplementation "eu.koboo.propconf:propconf:$propConfVersion"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
