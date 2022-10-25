@@ -1,4 +1,3 @@
-
 package eu.koboo.paladins.api.data.player;
 
 import com.google.gson.*;
@@ -23,12 +22,12 @@ public class PlayerDeserializer implements JsonDeserializer<Player> {
         player.setAccountLevel(object.get("Level").getAsLong());
         player.setMasteryLevel(object.get("MasteryLevel").getAsLong());
         player.setPlatformName(object.get("Name").getAsString());
-        if(object.has("hz_player_name") && !object.get("hz_player_name").isJsonNull()) {
+        if (object.has("hz_player_name") && !object.get("hz_player_name").isJsonNull()) {
             player.setPaladinsName(object.get("hz_player_name").getAsString());
         } else {
             player.setPaladinsName(player.getPlatformName());
         }
-        if(object.has("hz_gamer_tag") && !object.get("hz_gamer_tag").isJsonNull()) {
+        if (object.has("hz_gamer_tag") && !object.get("hz_gamer_tag").isJsonNull()) {
             player.setPaladinsGamerTag(object.get("hz_gamer_tag").getAsString());
         } else {
             player.setPaladinsGamerTag(null);

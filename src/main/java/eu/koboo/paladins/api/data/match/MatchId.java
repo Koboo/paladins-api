@@ -16,4 +16,5 @@ public class MatchId {
     long entryDateTime;
     String region;
     boolean active;
+    GameMode gameMode;
 }

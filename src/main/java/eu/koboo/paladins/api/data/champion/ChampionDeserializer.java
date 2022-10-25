@@ -1,4 +1,3 @@
-
 package eu.koboo.paladins.api.data.champion;
 
 import com.google.gson.*;

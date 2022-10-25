@@ -160,6 +160,7 @@ public class Example {
 ````
 
 ## References & Sources
+
 - [Official Documentation](https://docs.google.com/document/d/1OFS-3ocSx-1Rvg4afAnEHlT3917MAK_6eJTR6rzr-BM/edit)
 - [Unoffical Documentation](https://github.com/luissilva1044894/hirez-api-docs)
 - [Java 9 HttpClient](https://www.baeldung.com/java-9-http-client)

@@ -7,7 +7,7 @@ public class URLBuilderMatchIdList extends URLBuilderSession {
     @Override
     public String build(APIRequest request) throws URLParameterException {
         String prebuildUrl = super.build(request);
-        if(request.getMatchIdList().isEmpty()) {
+        if (request.getMatchIdList().isEmpty()) {
             throw new URLParameterException(request.getMethod(), "matchIdList");
         }
         StringBuilder matchIdSegment = new StringBuilder();

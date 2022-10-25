@@ -76,7 +76,7 @@ public enum ChampionId {
 
     public static ChampionId parse(int championId) {
         for (ChampionId value : VALUES) {
-            if(value.getId() != championId) {
+            if (value.getId() != championId) {
                 continue;
             }
             return value;

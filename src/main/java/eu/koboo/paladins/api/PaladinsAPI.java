@@ -1,7 +1,6 @@
 package eu.koboo.paladins.api;
 
 import com.google.gson.*;
-import eu.koboo.paladins.api.config.PropertyConfig;
 import eu.koboo.paladins.api.data.champion.Champion;
 import eu.koboo.paladins.api.data.champion.ChampionDeserializer;
 import eu.koboo.paladins.api.data.champion.ChampionId;
@@ -34,7 +33,7 @@ import java.net.http.HttpClient;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -121,7 +120,7 @@ public class PaladinsAPI {
         this.currentSessionId = sessionId;
         this.createdSessionTimeStamp = System.currentTimeMillis();
 
-        if(!isSessionValid()) {
+        if (!isSessionValid()) {
             throw new RuntimeException("Created new session, but it's invalid.");
         }
 
@@ -360,7 +359,7 @@ public class PaladinsAPI {
     }
 
     public List<MatchId> getMatchIdByQueue(int queueId, long date, Hours hours, Minutes minutes) {
-        return getMatchIdByQueue(queueId, date, hours, minutes);
+        return getMatchIdByQueue(queueId, date, hours.getValue(), minutes == null ? null : minutes.getValue());
     }
 
     public List<MatchId> getMatchIdByQueue(int queueId, long date, String hours, String minutes) {
@@ -380,16 +379,17 @@ public class PaladinsAPI {
         for (JsonElement element : array) {
             JsonObject object = (JsonObject) element;
             MatchId entity = gson.fromJson(object, MatchId.class);
+            entity.setGameMode(GameMode.parse(queueId));
             list.add(entity);
         }
         return list;
     }
 
-    public List<MatchPlayer> getMatchDetailsBatch(MatchId matchId) {
-        return getMatchDetailsBatch(matchId.getMatchId());
+    public List<MatchPlayer> getMatchDetails(MatchId matchId) {
+        return getMatchDetails(matchId.getMatchId());
     }
 
-    public List<MatchPlayer> getMatchDetailsBatch(long matchId) {
+    public List<MatchPlayer> getMatchDetails(long matchId) {
         Validator.apiMethod(currentSessionId, "getMatchDetails");
         List<MatchPlayer> list = new ArrayList<>();
         JsonArray array = APIRequest.create(client, config.getCredentials())
@@ -407,6 +407,28 @@ public class PaladinsAPI {
         }
         return list;
     }
+
+    public List<MatchPlayer> getMatchDetailsBatchLarge(List<Long> matchIdList) {
+        int matchIdsPerRequest = 20;
+        if (matchIdList.size() > matchIdsPerRequest) {
+            List<MatchPlayer> matchPlayerList = new ArrayList<>();
+            Iterator<Long> idIterator = matchIdList.iterator();
+            List<Long> copyList = new ArrayList<>();
+            while (idIterator.hasNext()) {
+                if (copyList.size() >= matchIdsPerRequest) {
+                    matchPlayerList.addAll(getMatchDetailsBatch(copyList));
+                    copyList.clear();
+                }
+                copyList.add(idIterator.next());
+            }
+            if (!copyList.isEmpty()) {
+                matchPlayerList.addAll(getMatchDetailsBatch(copyList));
+            }
+            return matchPlayerList;
+        }
+        return getMatchDetailsBatch(matchIdList);
+    }
+
 
     public List<MatchPlayer> getMatchDetailsBatch(List<Long> matchIdList) {
         Validator.apiMethod(currentSessionId, "getMatchDetailsBatch");

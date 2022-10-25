@@ -1,5 +1,3 @@
-
-
 package eu.koboo.paladins.api.data.champion.skin;
 
 import com.google.gson.*;

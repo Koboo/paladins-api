@@ -71,7 +71,7 @@ public enum GameMode {
 
     public static GameMode parse(int queueId) {
         for (GameMode gameMode : VALUES) {
-            if(gameMode.getQueueId() != queueId) {
+            if (gameMode.getQueueId() != queueId) {
                 continue;
             }
             return gameMode;
