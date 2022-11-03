@@ -153,19 +153,27 @@ public class APIRequest {
     }
 
     public JsonObject asJsonObject() {
-        String result = asString();
-        if (Validator.isEmpty(result)) {
+        try {
+            String result = asString();
+            if (Validator.isEmpty(result)) {
+                return null;
+            }
+            return (JsonObject) JsonParser.parseString(result);
+        } catch (Exception e) {
             return null;
         }
-        return (JsonObject) JsonParser.parseString(result);
     }
 
     public JsonArray asJsonArray() {
-        String result = asString();
-        if (Validator.isEmpty(result)) {
+        try {
+            String result = asString();
+            if (Validator.isEmpty(result)) {
+                return null;
+            }
+            return (JsonArray) JsonParser.parseString(result);
+        } catch (Exception e) {
             return null;
         }
-        return (JsonArray) JsonParser.parseString(result);
     }
 
     public JsonObject asFirstJsonObject() {
