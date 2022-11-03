@@ -17,7 +17,7 @@ public class MatchPlayerDeserializer implements JsonDeserializer<MatchPlayer> {
         matchPlayer.setChampionId(object.get("ChampionId").getAsLong());
         matchPlayer.setMatchId(object.get("Match").getAsLong());
         matchPlayer.setQueueId(object.get("match_queue_id").getAsLong());
-        matchPlayer.setMatchDuration(object.get("Match").getAsLong());
+        matchPlayer.setMatchDuration(object.get("Match_Duration").getAsLong());
         matchPlayer.setMatchTimeStamp(DateFormatter.parseFrom(object.get("Entry_Datetime").getAsString()));
 
         matchPlayer.setWinning(object.get("Win_Status").getAsString().equalsIgnoreCase("Winner"));
