@@ -13,6 +13,7 @@ import eu.koboo.paladins.api.data.player.Player;
 import eu.koboo.paladins.api.data.player.PlayerChampion;
 import eu.koboo.paladins.api.request.Hours;
 import eu.koboo.paladins.api.request.Language;
+import eu.koboo.paladins.api.utils.DateFormatter;
 import eu.koboo.paladins.api.utils.Validator;
 import eu.koboo.propconf.PropertyConfig;
 import eu.koboo.propconf.key.StringKey;
@@ -139,8 +140,12 @@ public class Test {
                 List<MatchId> matchIdList = api.getMatchIdByQueue(gameMode.getQueueId(), System.currentTimeMillis(), Hours.DAY, null);
 
                 System.out.println(gameMode.name() + ": " + matchIdList.size());
-                List<MatchPlayer> matchPlayerList = api.getMatchDetailsBatchLarge(matchIdList.stream().map(MatchId::getMatchId).toList());
-                System.out.println(matchPlayerList.size());
+                List<MatchPlayer> matchPlayerList = api.getMatchDetails(matchIdList.get(0).getMatchId());
+                for (MatchPlayer matchPlayer : matchPlayerList) {
+                    System.out.println("> " + matchPlayer.getPlayerId());
+                    System.out.println(matchPlayer.getMatchDuration());
+                    System.out.println(DateFormatter.formatPathDate(matchPlayer.getMatchTimeStamp()));
+                }
             }
         }
     }

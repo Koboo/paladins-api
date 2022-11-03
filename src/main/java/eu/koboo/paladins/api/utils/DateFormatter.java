@@ -11,7 +11,7 @@ public class DateFormatter {
     // Used by the api-endpoint "gethirezserverstatus"
     private static final SimpleDateFormat STATUS_PARSE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     // Used by the api-endpoints for date-fields
-    private static final SimpleDateFormat API_PARSE_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss a");
+    private static final SimpleDateFormat API_PARSE_DATE_FORMAT = new SimpleDateFormat("M/d/yyyy HH:mm:ss a");
     // Used by the api-paths as parameter
     private static final SimpleDateFormat API_PATH_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 
